@@ -1,9 +1,13 @@
 package com.hackgsu.economical;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -13,7 +17,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
-
+    String json_string;
+    String json_string2;
     private TextView mTextViewResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String myResponse = response.body().string();
-
+                    json_string = myResponse;
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -61,3 +66,13 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
+public void parseJSON (View view) {
+    if (json_string == null) {
+        Toast.makeText(getApplicationContext(), "No Food Available", Toast.LENGTH_SHORT).show();
+    } else {
+        Intent intent = new Intent(this, DisplayListView.class);
+        intent.putExtra("json_data",json_string);
+        intent.putExtra("json_price",json_string2); //get this data!!
+        startActivity(intent);
+    }
+}
