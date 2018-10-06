@@ -17,7 +17,7 @@ public class Send_HTTP_Request2 {
     }
 
     private static void call_me() throws Exception {
-        String url = "http://api.ipinfodb.com/v3/ip-city/?key=d64fcfdfacc213c7ddf4ef911dfe97b55e4696be3532bf8302876c09ebd06b&ip=74.125.45.100&format=json";
+        String url = "https://gateway-staging.ncrcloud.com/catalog/category-nodes/snapshot";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         // optional default is GET
