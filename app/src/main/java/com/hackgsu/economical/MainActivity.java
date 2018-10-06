@@ -20,10 +20,11 @@ public class MainActivity extends AppCompatActivity {
     String json_string;
     String json_string2;
     private TextView mTextViewResult;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         mTextViewResult = findViewById(R.id.text_view_result);
 
         OkHttpClient client = new OkHttpClient();
@@ -64,15 +65,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-}
 
-public void parseJSON (View view) {
-    if (json_string == null) {
-        Toast.makeText(getApplicationContext(), "No Food Available", Toast.LENGTH_SHORT).show();
-    } else {
-        Intent intent = new Intent(this, DisplayListView.class);
-        intent.putExtra("json_data",json_string);
-        intent.putExtra("json_price",json_string2); //get this data!!
-        startActivity(intent);
+    public void parseJSON(View view) {
+        if (json_string == null) {
+            Toast.makeText(getApplicationContext(), "No Food Available", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(this, DisplayListView.class);
+            intent.putExtra("json_data", json_string);
+            intent.putExtra("json_price", json_string2); //get this data!!
+            startActivity(intent);
+        }
     }
+
 }

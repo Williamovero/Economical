@@ -33,13 +33,13 @@ public class DisplayListView extends AppCompatActivity {
             jsonObject = new JSONObject(json_string);
             jsonArray = jsonObject.getJSONArray("snapshot");
             int count = 0;
-            String item,price;
+            String item, price;
             jsonObject2 = new JSONObject(json_string2);
             jsonArray2 = jsonObject.getJSONArray("snapshot");
 
             while (count < jsonArray.length()) {
                 JSONObject JO = jsonArray.getJSONObject(count);
-                JSONArray JA = JO.getJSONArray("shortDescription").getJSONArray("values");
+                JSONArray JA = JO.getJSONArray("shortDescription").getJSONArray(Integer.parseInt("value"));
                 JSONObject JO2 = JA.getJSONObject(0);
                 item = JO2.getString("value");
 

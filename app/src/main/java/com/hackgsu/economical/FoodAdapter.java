@@ -14,18 +14,15 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.RecentlyNonNull;
-import androidx.annotation.RecentlyNullable;
-
-public class FoodAdapter extends ArrayAdapter{
+public class FoodAdapter extends ArrayAdapter {
     List list = new ArrayList();
 
-    public FoodAdapter(@RecentlyNonNull @NonNull Context context, int resource) {
-        super(context, re source);
+    FoodAdapter(@NonNull Context context, int resource) {
+        super(context, resource);
     }
 
     @Override
-    public void add(@RecentlyNullable @Nullable Object object) {
+    public void add(@Nullable Object object) {
         super.add(object);
         list.add(object);
     }
@@ -35,21 +32,19 @@ public class FoodAdapter extends ArrayAdapter{
         return list.size();
     }
 
-    @RecentlyNullable
     @Nullable
     @Override
     public Object getItem(int position) {
         return list.get(position);
     }
 
-    @RecentlyNonNull
     @NonNull
     @Override
-    public View getView(int position, @RecentlyNullable @Nullable View convertView, @RecentlyNonNull @NonNull ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View row;
         row = convertView;
         FoodHolder foodHolder;
-        if (row==null) {
+        if (row == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = layoutInflater.inflate(R.layout.row_layout, parent, false);
 
@@ -61,7 +56,7 @@ public class FoodAdapter extends ArrayAdapter{
             foodHolder = (FoodHolder) row.getTag();
         }
 
-        Food food =  (Food) this.getItem(position);
+        Food food = (Food) this.getItem(position);
         foodHolder.tx_item.setText(food.getItem());
         foodHolder.tx_price.setText(food.getPrice());
 
