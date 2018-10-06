@@ -2,9 +2,10 @@ package com.hackgsu.economical;
 
 
 public class Food {
-    private String item,price,location;
+    private String item;
+    private String price;
 
-    public Food(String item, String price) {
+    Food(String item, String price) {
         this.setItem(item);
         this.setPrice(price);
     }
@@ -17,11 +18,11 @@ public class Food {
         this.item = item;
     }
 
-    public String getPrice() {
+    String getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    private void setPrice(String price) {
         this.price = price;
     }
 

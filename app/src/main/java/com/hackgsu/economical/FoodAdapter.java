@@ -9,13 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class FoodAdapter extends ArrayAdapter {
-    List list = new ArrayList();
+    private List<Object> list = new ArrayList<Object>();
 
     FoodAdapter(@NonNull Context context, int resource) {
         super(context, resource);
@@ -49,7 +47,7 @@ public class FoodAdapter extends ArrayAdapter {
             row = layoutInflater.inflate(R.layout.row_layout, parent, false);
 
             foodHolder = new FoodHolder();
-            foodHolder.tx_item = (TextView) row.findViewById(R.id.tx_item);
+            foodHolder.tx_item = row.findViewById(R.id.tx_item);
             foodHolder.tx_price = (TextView) row.findViewById(R.id.tx_price);
             row.setTag(foodHolder);
         } else {

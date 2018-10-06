@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_main);
         mTextViewResult = findViewById(R.id.text_view_result);
 
         OkHttpClient client = new OkHttpClient();
@@ -51,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(@NonNull Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    final String myResponse = response.body().string();
+                    assert response.body() != null;
+                    final String myResponse = Objects.requireNonNull(response.body()).string();
                     json_string = myResponse;
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
@@ -75,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("json_price", json_string2); //get this data!!
             startActivity(intent);
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main2, menu);
+        return true;
     }
 
 }
