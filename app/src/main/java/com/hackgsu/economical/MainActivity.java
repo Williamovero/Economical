@@ -1,5 +1,6 @@
 package com.hackgsu.economical;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +10,16 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -20,8 +28,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
-    String json_string;
+//    String json_string;
     private TextView mTextViewResult;
+//    private String myResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +40,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+//        Start of HTTP Request
         final Button button = findViewById(R.id.button_parse);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View activity_main) {
-                mTextViewResult = findViewById(R.id.text_view_result);
+
 
                 OkHttpClient client = new OkHttpClient();
 
@@ -64,12 +75,33 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-                            final String myResponse = response.body().string();
+                            mTextViewResult = findViewById(R.id.text_view_result);
+                            String myResponse = response.body().string();
+                            Map<String, Integer> responses = new HashMap<>();
+                            //parsing
+                            try {
+                                int count = 0;
 
+                                JSONObject jsonObject = new JSONObject(myResponse);
+                                JSONArray jsonArray = jsonObject.getJSONArray("snapshot");
+                                while (count < jsonArray.length()) {
+                                    JSONObject jsonObject2 = jsonArray.getJSONObject(count);
+                                    jsonObject2 = jsonObject2.getJSONObject("shortDescription");
+                                    JSONArray jsonArray2 = jsonObject2.getJSONArray("values");
+                                    jsonObject2 = jsonArray2.getJSONObject(0);
+                                    //jsonObject = jsonObject.getJSONObject("value");
+                                    responses.put(jsonObject2.getString("value"), 0);
+                                    count++;
+                                }
+
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
+                            final String myresp2 = responses.keySet().toString();
                             MainActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mTextViewResult.setText(myResponse);
+                                    mTextViewResult.setText(myresp2);
                                 }
                             });
                         }
@@ -80,17 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    public void parseJSON(View view) {
-//        if (json_string == null) {
-//            Toast.makeText(getApplicationContext(), "No Food Available", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Intent intent = new Intent(this, DisplayListView.class);
-//            intent.putExtra("json_data", json_string);
-//            intent.putExtra("json_price", json_string2); //get this data!!
-//            startActivity(intent);
-//        }
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -98,4 +119,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
 }
+
