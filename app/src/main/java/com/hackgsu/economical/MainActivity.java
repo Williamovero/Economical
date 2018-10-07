@@ -28,9 +28,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
-//    String json_string;
+    //    String json_string;
     private TextView mTextViewResult;
-//    private String myResponse;
+    private TextView mTextViewResult2;
+    //    private String myResponse;
+    private Map<Integer, String> responses;
+    private Map<Integer, String> responses2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,21 +79,26 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
                             mTextViewResult = findViewById(R.id.text_view_result);
+                            mTextViewResult2 = findViewById(R.id.tx_price);
                             String myResponse = response.body().string();
-                            Map<String, Integer> responses = new HashMap<>();
+                            responses = new HashMap<>();
                             //parsing
                             try {
                                 int count = 0;
 
                                 JSONObject jsonObject = new JSONObject(myResponse);
                                 JSONArray jsonArray = jsonObject.getJSONArray("snapshot");
-                                while (count < jsonArray.length()) {
+                                while (count < 20) {
                                     JSONObject jsonObject2 = jsonArray.getJSONObject(count);
-                                    jsonObject2 = jsonObject2.getJSONObject("shortDescription");
-                                    JSONArray jsonArray2 = jsonObject2.getJSONArray("values");
-                                    jsonObject2 = jsonArray2.getJSONObject(0);
+                                    JSONObject jsonObject3 = jsonObject2.getJSONObject("shortDescription");
+                                    JSONArray jsonArray2 = jsonObject3.getJSONArray("values");
+                                    jsonObject3 = jsonArray2.getJSONObject(0);
                                     //jsonObject = jsonObject.getJSONObject("value");
-                                    responses.put(jsonObject2.getString("value"), 0);
+
+                                    JSONObject jo4 = jsonObject2.getJSONObject("itemId");
+                                    int id = jo4.getInt("itemCode");
+
+                                    responses.put(id, jsonObject3.getString("value"));
                                     count++;
                                 }
 
@@ -101,24 +109,104 @@ public class MainActivity extends AppCompatActivity {
                             MainActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    //mTextViewResult.setText(myresp2);
+                                }
+                            });
+                        }
+                    }
+                });
+
+                client = new OkHttpClient();
+
+                url = "https://gateway-staging.ncrcloud.com/catalog/items/snapshot";
+
+                request = new Request.Builder()
+                        .url("https://gateway-staging.ncrcloud.com/catalog/item-prices/snapshot")
+                        .get()
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Accept", "application/json")
+                        .addHeader("nep-application-key", "8a00860b6641a0ae016646edbaa3000d")
+                        .addHeader("nep-organization", "ncr-market")
+                        .addHeader("nep-service-version", "2.2.1:2")
+                        .addHeader("nep-enterprise-unit", "7c54465e9f5344598276ec1f941f5a3c")
+                        .addHeader("Authorization", "Basic YWNjdDppbnN0YW50aGFja3dpbm5lcnNAaW5zdGFudGhhY2t3aW5uZXJzc2VydmljZXVzZXI6T1ZlcjcwNzA=")
+                        .addHeader("Cache-Control", "no-cache")
+                        .addHeader("Postman-Token", "616e470d-afc2-48de-9134-486e706513ac")
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    //Response failed
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Response is successful
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            mTextViewResult = findViewById(R.id.text_view_result);
+                            String myResponse = response.body().string();
+                            responses2 = new HashMap<>();
+                            StringBuilder sb = new StringBuilder();
+                            Map<String, String> finalresponse = new HashMap<>();
+                            //parsing
+                            try {
+                                int count = 0;
+
+                                JSONObject jsonObject = new JSONObject(myResponse);
+                                JSONArray jsonArray = jsonObject.getJSONArray("snapshot");
+                                while (count < 20) {
+                                    JSONObject jsonObject2 = jsonArray.getJSONObject(count);
+                                    //jsonObject = jsonObject.getJSONObject("value");
+
+                                    JSONObject jo4 = jsonObject2.getJSONObject("priceId");
+                                    int id = jo4.getInt("itemCode");
+
+                                    responses2.put(id, jsonObject2.getString("price"));
+                                    count++;
+                                }
+
+
+
+                                for (Integer i: responses.keySet()){
+                                    if (responses2.containsKey(i)) {
+                                        finalresponse.put(responses2.get(i), responses.get(i));
+                                    }
+                                }
+
+                                for (String s: finalresponse.keySet()) {
+                                    sb.append(finalresponse.get(s));
+                                    sb.append(" - ");
+                                    sb.append(s);
+//                                    sb.append("  ");
+                                }
+
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
+                            final String myresp2 = sb.toString();
+                            MainActivity.this.runOnUiThread(new Runnable() {
+
+                                public void run() {
                                     mTextViewResult.setText(myresp2);
                                 }
                             });
                         }
                     }
                 });
+
             }
+
+            public boolean onCreateOptionsMenu(Menu menu) {
+                MenuInflater inflater = getMenuInflater();
+                inflater.inflate(R.menu.main2, menu);
+                return true;
+            }
+
+
         });
-
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main2, menu);
-        return true;
-    }
-
 
 }
 
