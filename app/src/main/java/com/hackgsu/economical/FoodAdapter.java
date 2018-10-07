@@ -10,10 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FoodAdapter extends ArrayAdapter {
-    private List<Object> list = new ArrayList<Object>();
+    private ArrayList<Object> list = new ArrayList<>();
 
     FoodAdapter(@NonNull Context context, int resource) {
         super(context, resource);
@@ -21,18 +20,19 @@ public class FoodAdapter extends ArrayAdapter {
 
     @Override
     public void add(@Nullable Object object) {
-        super.add(object);
         list.add(object);
     }
 
     @Override
     public int getCount() {
+
         return list.size();
     }
 
     @Nullable
     @Override
     public Object getItem(int position) {
+
         return list.get(position);
     }
 
@@ -48,13 +48,14 @@ public class FoodAdapter extends ArrayAdapter {
 
             foodHolder = new FoodHolder();
             foodHolder.tx_item = row.findViewById(R.id.tx_item);
-            foodHolder.tx_price = (TextView) row.findViewById(R.id.tx_price);
+            foodHolder.tx_price = row.findViewById(R.id.tx_price);
             row.setTag(foodHolder);
         } else {
             foodHolder = (FoodHolder) row.getTag();
         }
 
         Food food = (Food) this.getItem(position);
+        assert food != null;
         foodHolder.tx_item.setText(food.getItem());
         foodHolder.tx_price.setText(food.getPrice());
 
