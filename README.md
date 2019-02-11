@@ -1,4 +1,9 @@
 # Economical
+
+<img src="Images/EconomicalLogo.jpg" alt="EconomicalLogo" style="width:200px; display: block; margin-left: auto; margin-right: auto;">
+<img src="Images/ShopByPrice.jpg" alt="ShopByPrice" style="width:200px; display: block; margin-left: auto; margin-right: auto;">
+<img src="Images/InformationAbout.jpg" alt="InformationAbout" style="width:200px; display: block; margin-left: auto; margin-right: auto;">
+
 ## Inspiration
 Helping the homeless, reducing wasted food, providing cheap and nutritious options for food are all our inspiration for this project.
 
